@@ -3,6 +3,11 @@
         <?php settings_fields( 'headlineengine-settings-group' ); ?>
         <?php do_settings_sections( 'headlineengine-settings-group' ); ?>
         <h1><?php _e( 'HeadlineEngine Settings', 'headlineengine' ); ?></h1>
+        <?php
+            if (empty(get_option("headlineengine_powerwords_list", ""))) {
+                echo '<div id="headlineengine_load_powerwords_container" class="error"><p>' . __("You have no powerwords set. Should we load a powerword list from <a href='https://rankmath.com/blog/power-words/' target='_blank'>RankMath</a>?</p><p><input id='headlineengine_load_powerwords' type='button' class='button' value='Load powerwords' />", "headlineengine") . '</p></div>';
+            }
+        ?>
         <?php settings_errors(); ?>
         <hr>
         <table class="form-table">
@@ -40,8 +45,9 @@
                 <tr>
                     <th scope="row"><?php _e("Powerwords", "headlineengine") ?></th>
                     <td>
-                        <textarea name="headlineengine_powerwords_list" rows="10" cols="50"><?= get_option('headlineengine_powerwords_list', '') ?></textarea>
+                        <textarea id="headlineengine_powerwords_list" name="headlineengine_powerwords_list" rows="10" cols="50"><?= get_option('headlineengine_powerwords_list', '') ?></textarea>
                         <div><?= _e("Enter each powerword on a new line. Case is ignored.", "headlineengine") ?></div>
+                        
                     </td>
                 </tr>
                 <tr>

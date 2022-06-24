@@ -48,8 +48,8 @@ class HeadlineEnginePost {
         }
         $script = "var headlineengine_readability_range_min = " . intval(get_option('headlineengine_readability_range_min', 45)) . ";";
         $script .= "var headlineengine_readability_range_max = " . intval(get_option('headlineengine_readability_range_max', 90)) . ";";
-        $script .= "var headlineengine_length_range_min = " . intval(get_option('headlineengine_length_range_min', 50)) . ";";
-        $script .= "var headlineengine_length_range_max = " . intval(get_option('headlineengine_length_range_max', 150)) . ";";
+        $script .= "var headlineengine_length_range_min = " . intval(get_option('headlineengine_length_range_min', 40)) . ";";
+        $script .= "var headlineengine_length_range_max = " . intval(get_option('headlineengine_length_range_max', 90)) . ";";
         $script .= "var headlineengine_powerwords_list = `" . preg_replace("/[^A-Za-z0-9 \n]/", '', get_option('headlineengine_powerwords_list', "")) . "`;";
         wp_add_inline_script('headlineengine-post-script', $script, 'before');
         print "<div id='headlineengine-score-container'></div>";
