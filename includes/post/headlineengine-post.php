@@ -46,6 +46,12 @@ class HeadlineEnginePost {
             wp_enqueue_script( "headlineengine-post-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-post.js", [], "0.0.1", true );
             wp_enqueue_style( "headlineengine-post-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-post.css", [], "0.0.1" );
         }
+        $script = "var headlineengine_readability_range_min = " . get_option('headlineengine_readability_range_min', 45) . ";";
+        $script .= "var headlineengine_readability_range_max = " . get_option('headlineengine_readability_range_max', 90) . ";";
+        $script .= "var headlineengine_length_range_min = " . get_option('headlineengine_length_range_min', 50) . ";";
+        $script .= "var headlineengine_length_range_max = " . get_option('headlineengine_length_range_max', 150) . ";";
+        $script .= "var headlineengine_powerwords_list = `" . get_option('headlineengine_powerwords_list', "") . "`;";
+        wp_add_inline_script('headlineengine-post-script', $script, 'before');
         print "<div id='headlineengine-score-container'></div>";
     }
 

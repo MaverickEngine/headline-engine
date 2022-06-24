@@ -1,13 +1,11 @@
 require("./headlineengine-post-style.scss");
 require("wordsmith-js/dist/wordsmith.min.js");
-const Powerwords = require("./powerwords");
-console.log(Wordsmith.fleschReadingEaseScore("Quadraphonia is an extremely long phrase."));
-const readable_range = [45, 90];
+const powerword_list = headlineengine_powerwords_list.split("\n").map(w => w.toLowerCase());
+const readable_range = [headlineengine_readability_range_min || 45, headlineengine_readability_range_max || 90];
 const readable_range_min = readable_range[0];
 const readable_range_max = readable_range[1];
 const readability_messages = ["Good", "Too Simple", "Too Complex"];
-
-const length_range = [40, 90];
+const length_range = [headlineengine_length_range_min || 40, headlineengine_length_range_max || 90];
 const length_messages = ["Good", "Too Short", "Too Long"];
 
 function readability(title) {
@@ -38,7 +36,7 @@ function powerwords(title) {
     if (!title) return;
     title = title.toLowerCase().replace(/[^a-z]/g, " ");
     const words = title.split(" ").filter(w => w.length > 3);
-    const powerwords_found = words.filter(w => Powerwords.includes(w));
+    const powerwords_found = words.filter(w => powerword_list.includes(w));
     return { rating: powerwords_found.length, words: powerwords_found, pass: powerwords_found.length > 0 };
 }
 
