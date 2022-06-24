@@ -1,0 +1,71 @@
+#titlewrap {
+    display: flex;
+    flex-direction: row;
+}
+
+#headlineengine-main-title-ab {
+    // height: 30px;
+    // line-height: 100%;
+    // padding: 3px 8px;
+    // font-size: 1.4em;
+    flex-grow: 1;
+    // border: 1px solid #8c8f94;
+    // border-left: none;
+    // border-top-right-radius: 4px;
+    // border-bottom-right-radius: 4px;
+}
+
+#titlediv #title {
+    flex-grow: 2;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.headlineengine-score {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#headlineengine-score-container {
+    display: flex;
+    flex-direction: row;
+    margin: 10px 0px;
+}
+
+.headlineengine-analysis {
+    margin-left: 10px;
+}
+
+.headlineengine-score-value {
+    width: 60px;
+    height: 60px;
+    font-size: 1.5em;
+    border-radius: 50%;
+    border-color:rgba(138,138,138, 0.6);
+    border-style: solid;
+    border-width: 2px;
+    text-align: center;
+    line-height: 60px;
+    background-color: rgba(138, 138, 138, 0.2);
+    /* border-bottom: 0; */
+  }
+
+.headlineengine-score-value-good {
+    background-color: rgba(31, 120, 31, 0.2);
+    border-color:rgba(31, 120, 31, 0.2)
+}
+
+.headlineengine-score-value-bad {
+    background-color: rgba(255, 0, 0, 0.2);
+    border-color:rgba(255, 0, 0, 0.6)
+}
+
+.headlineengine-score-value-okay {
+    background-color: rgba(250, 180, 10, 0.2);
+    border-color:rgba(250, 180, 10, 0.6)
+}
+
+.headlineengine-score-title {
+    font-weight: bold;
+}
