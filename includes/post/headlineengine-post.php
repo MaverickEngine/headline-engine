@@ -36,6 +36,9 @@ class HeadlineEnginePost {
 
     public function edit_form_after_title( ) {
         global $wpdb;
+        if (!in_array(get_post_type(), get_option('headlineengine_post_types'))) {
+            return false;
+        }
         if (get_option('headlineengine_developer_mode')) {
             wp_enqueue_script( "headlineengine-post-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-post.js", [], "0.0.1", true );
             wp_enqueue_style( "headlineengine-post-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-post.css", [], "0.0.1" );

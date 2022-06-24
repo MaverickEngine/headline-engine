@@ -21,15 +21,15 @@ const HEADLINEENGINE_DB_VERSION = 0.4;
 require_once( plugin_dir_path( __FILE__ ) . 'includes/db/headlineengine-db.php' );
 $headlineengine_db = new HeadlineEngineDB();
 
-// function taxonomy_engine_admin_init() {
-//     if (!is_admin()) {
-//         return;
-//     }
-//     require_once(plugin_dir_path( __FILE__ ) . 'includes/admin/taxonomyengine-scripts.php' );
-//     require_once(plugin_basename('includes/admin/taxonomyengine-admin.php' ) );
-//     new TaxonomyEngineAdmin([]);
-// }
-// add_action( 'init', 'taxonomy_engine_admin_init' );
+function headlineengine_admin_init() {
+    if (!is_admin()) {
+        return;
+    }
+    // require_once(plugin_dir_path( __FILE__ ) . 'includes/admin/taxonomyengine-scripts.php' );
+    require_once(plugin_basename('includes/admin/headlineengine-admin.php' ) );
+    new HeadlineEngineAdmin([]);
+}
+add_action( 'init', 'headlineengine_admin_init' );
 
 // function taxonomy_engine_navigation_init() {
 //     require_once(plugin_basename('includes/navigation/taxonomyengine-navigation.php' ) );
@@ -53,7 +53,7 @@ function headlineengine_common_init() {
     require_once( plugin_dir_path( __FILE__ ) . 'includes/headlineengine-setup.php' );
     new HeadlineEngineSetup();
 }
-add_action( 'init', 'headlineengine_common_init', 2 );
+add_action( 'admin_init', 'headlineengine_common_init', 2 );
 
 function headlineengine_post_init() {
     require_once( plugin_dir_path( __FILE__ ) . 'includes/post/headlineengine-post.php' );
