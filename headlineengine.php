@@ -2,8 +2,8 @@
 /**
 * Plugin Name: HeadlineEngine
 * Plugin URI: https://github.com/MaverickEngine/headline-engine
-* Description: Get instant headline analysis based on readability, length, and powerwords.
-* Author: MavEngine, Daily Maverick, Jason Norwood-Young
+* Description: What makes a good headline? Get instant headline analysis based on readability, length, and powerwords. Brought to you by MavEngine, &lt;em&gt;Powering Media. 
+* Author: MavEngine
 * Author URI: https://mavengine.com
 * Version: 0.0.1
 * License: GPLv2 or later
