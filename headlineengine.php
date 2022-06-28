@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: HeadlineEngine
- * Plugin URI: https://github.com/MaverickEngine/headline-engine
- * Description: A/B Testing for headlines in WordPress.
- * Author: Daily Maverick, Jason Norwood-Young
- * Author URI: https://dailymaverick.co.za
- * Version: 0.0.1
- * License: GPLv3
- * License URI: https://www.gnu.org/licenses/gpl-3.0.html
- * WC requires at least: 5.8.0
- * Tested up to: 6.0
- *
- */
+* Plugin Name: HeadlineEngine
+* Plugin URI: https://github.com/MaverickEngine/headline-engine
+* Description: Get instant headline analysis based on readability, length, and powerwords.
+* Author: MavEngine, Daily Maverick, Jason Norwood-Young
+* Author URI: https://mavengine.com
+* Version: 0.0.1
+* License: GPLv2 or later
+* License URI: https://www.gnu.org/licenses/gpl-3.0.html
+* WC requires at least: 5.8.0
+* Tested up to: 5.8.2
+*
+*/
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
