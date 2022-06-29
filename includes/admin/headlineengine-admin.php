@@ -31,11 +31,11 @@ class HeadlineEngineAdmin {
 
     public function scripts() {
         if (get_option('headlineengine_developer_mode')) {
-            wp_enqueue_script( "headlineengine-admin-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.js", [], "0.0.1", true );
-            // wp_enqueue_style( "headlineengine-admin-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.css", [], "0.0.1" );
+            wp_enqueue_script( "headlineengine-admin-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.js", [], HEADLINEENGINE_SCRIPT_VERSION, true );
+            // wp_enqueue_style( "headlineengine-admin-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.css", [], HEADLINEENGINE_SCRIPT_VERSION );
         } else {
-            wp_enqueue_script( "headlineengine-admin-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.js", [], "0.0.1", true );
-            // wp_enqueue_style( "headlineengine-admin-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.css", [], "0.0.1" );
+            wp_enqueue_script( "headlineengine-admin-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.js", [], HEADLINEENGINE_SCRIPT_VERSION, true );
+            // wp_enqueue_style( "headlineengine-admin-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-admin.css", [], HEADLINEENGINE_SCRIPT_VERSION );
         }
         wp_add_inline_script( "headlineengine-admin-script", "var headlineengine_powerwords_url = '" . plugin_dir_url( __DIR__ ) . "assets/powerwords.txt';", "before" );
     }

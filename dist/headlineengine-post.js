@@ -49,10 +49,10 @@ var headlineengine_post = (function () {
 	    return { rating: powerwords_found.length, words: powerwords_found, pass: powerwords_found.length > 0 };
 	}
 
-	function display_analysis() {
+	function display_analysis(container) {
 	    const title = jQuery("#title").val();
 	    if (!title) {
-	        jQuery("#headlineengine-score-container").html("");
+	        container.html("");
 	        return;
 	    }
 	    const length_result = length(title);
@@ -63,28 +63,30 @@ var headlineengine_post = (function () {
 	    const score_el = jQuery(`
     <div class='headlineengine-score'>
         <div class='headlineengine-score-value headlineengine-score-value-${rating}'>${ Math.floor(score / 3 * 100) }</div>
-        <div class='headlineengine-score-title'>Headline Score</div>
+        <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
     </div>`);
 	    const analysis = jQuery(`<div class="headlineengine-analysis">
         <div class="headlineengine-analysis-readability">Readability: ${readability_result.message} (${Math.round(readability_result.score)})</div>
         <div class="headlineengine-analysis-length">Length: ${length_result.message} (${length_result.length})</div>
         <div class="headlineengine-analysis-powerwords">Powerwords: ${(powerwords_result.words.length) ? powerwords_result.words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(", ") : "None" }</div>
     </div>`);
-	    jQuery("#headlineengine-score-container").html(score_el);
-	    jQuery("#headlineengine-score-container").append(analysis);
-
+	    container.html(score_el);
+	    container.append(analysis);
 	}
 
 	async function main() {
 	    jQuery(() => {
-	        // const titlewrap_el = jQuery("#titlewrap");
+	        const titlewrap_el = jQuery("#titlewrap");
 	        // const ab_el = jQuery("<input type='button' class='button' value='A/B' id='headlineengine-main-title-ab' />");
 	        // titlewrap_el.append(ab_el);
-	        display_analysis();
+	        const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
+	        titlewrap_el.after(headline_score_container_el);
+	        display_analysis(headline_score_container_el);
+	        jQuery("#title").on("keyup", function(e) {
+	            display_analysis(headline_score_container_el);
+	        });
 	    });
-	    jQuery("#title").on("keyup", function(e) {
-	        display_analysis();
-	    });
+	    
 	}
 
 	main();

@@ -50,12 +50,12 @@
                         
                     </td>
                 </tr>
-                <tr>
+                <!-- <tr>
                     <th scope="row"><?= _e("Developer Mode", "headlineengine") ?></th>
                     <td>
                         <input type="checkbox" name="headlineengine_developer_mode" value="1" <?= get_option('headlineengine_developer_mode', 0) ? 'checked' : '' ?>>
                     </td>
-                </tr>
+                </tr> -->
             </tbody>
         </table>
         <?=	submit_button(); ?>
