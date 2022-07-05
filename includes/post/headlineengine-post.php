@@ -4,20 +4,6 @@ class HeadlineEnginePost {
         add_action('edit_form_after_title', array( $this, 'edit_form_after_title' ) );
     }
 
-    public function save_post( $post_id ) {
-        global $wpdb;
-        $post = get_post( $post_id );
-        if ( $post->post_type != 'post' ) {
-            return;
-        }
-    }
-
-    public function delete_post( $post_id ) {
-        global $wpdb;
-        $wpdb->delete( $wpdb->prefix . "headlineengine_posts", array( 'post_id' => $post_id ) );
-        $wpdb->delete( $wpdb->prefix . "headlineengine_titles", array( 'post_id' => $post_id ) );
-    }
-
     public function edit_form_after_title() {
         if (!in_array(get_post_type(), get_option('headlineengine_post_types'))) {
             return false;
