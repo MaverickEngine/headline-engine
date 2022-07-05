@@ -3,13 +3,12 @@ class HeadlineEngineAdminSettings {
     private $options = [
         "headlineengine_post_types",
         "headlineengine_readability_range_min",
+        "headlineengine_readability_target",
         "headlineengine_readability_range_max",
         "headlineengine_length_range_min",
+        "headlineengine_length_target",
         "headlineengine_length_range_max",
-        "headlineengine_powerwords_min",
-        "headlineengine_powerwords_max",
         "headlineengine_powerwords_list",
-        "headlineengine_developer_mode"
     ];
     
     public function __construct() {

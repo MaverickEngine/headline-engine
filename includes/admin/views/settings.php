@@ -29,6 +29,8 @@
                     <td>
                         <?php _e("Min", "headlineengine") ?>
                         <input type="number" name="headlineengine_readability_range_min" value="<?php esc_attr_e(get_option('headlineengine_readability_range_min', 45)) ?>">
+                        <?php _e("Target", "headlineengine") ?>
+                        <input type="number" name="headlineengine_readability_target" value="<?php esc_attr_e(get_option('headlineengine_readability_target', 55)) ?>">
                         <?php _e("Max", "headlineengine") ?>
                         <input type="number" name="headlineengine_readability_range_max" value="<?php esc_attr_e(get_option('headlineengine_readability_range_max', 90)) ?>">
                     </td>
@@ -38,6 +40,8 @@
                     <td>
                         <?php _e("Min", "headlineengine") ?>
                         <input type="number" name="headlineengine_length_range_min" value="<?php esc_attr_e(get_option('headlineengine_length_range_min', 40)) ?>" min="0">
+                        <?php _e("Target", "headlineengine") ?>
+                        <input type="number" name="headlineengine_length_target" value="<?php esc_attr_e(get_option('headlineengine_length_target', 82)) ?>" min="0">
                         <?php _e("Max", "headlineengine") ?>
                         <input type="number" name="headlineengine_length_range_max" value="<?php esc_attr_e(get_option('headlineengine_length_range_max', 90)) ?>" min="0">
                     </td>
