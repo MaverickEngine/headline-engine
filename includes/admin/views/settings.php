@@ -27,37 +27,37 @@
                 <tr>
                     <th scope="row"><?php _e("Readability Score Targets", "headlineengine") ?></th>
                     <td>
-                        <?= _e("Min", "headlineengine") ?>
-                        <input type="number" name="headlineengine_readability_range_min" value="<?= get_option('headlineengine_readability_range_min', 45) ?>">
-                        <?= _e("Max", "headlineengine") ?>
-                        <input type="number" name="headlineengine_readability_range_max" value="<?= get_option('headlineengine_readability_range_max', 90) ?>">
+                        <?php _e("Min", "headlineengine") ?>
+                        <input type="number" name="headlineengine_readability_range_min" value="<?php echo get_option('headlineengine_readability_range_min', 45) ?>">
+                        <?php _e("Max", "headlineengine") ?>
+                        <input type="number" name="headlineengine_readability_range_max" value="<?php echo get_option('headlineengine_readability_range_max', 90) ?>">
                     </td>
                 </tr>
                 <tr>
                     <th scope="row"><?php _e("Character Count Targets", "headlineengine") ?></th>
                     <td>
-                        <?= _e("Min", "headlineengine") ?>
-                        <input type="number" name="headlineengine_length_range_min" value="<?= get_option('headlineengine_length_range_min', 40) ?>">
-                        <?= _e("Max", "headlineengine") ?>
-                        <input type="number" name="headlineengine_length_range_max" value="<?= get_option('headlineengine_length_range_max', 90) ?>">
+                        <?php _e("Min", "headlineengine") ?>
+                        <input type="number" name="headlineengine_length_range_min" value="<?php echo get_option('headlineengine_length_range_min', 40) ?>" min="0">
+                        <?php _e("Max", "headlineengine") ?>
+                        <input type="number" name="headlineengine_length_range_max" value="<?php echo get_option('headlineengine_length_range_max', 90) ?>" min="0">
                     </td>
                 </tr>
                 <tr>
                     <th scope="row"><?php _e("Powerwords", "headlineengine") ?></th>
                     <td>
-                        <textarea id="headlineengine_powerwords_list" name="headlineengine_powerwords_list" rows="10" cols="50"><?= get_option('headlineengine_powerwords_list', '') ?></textarea>
-                        <div><?= _e("Enter each powerword on a new line. Case is ignored.", "headlineengine") ?></div>
+                        <textarea id="headlineengine_powerwords_list" name="headlineengine_powerwords_list" rows="10" cols="50"><?php echo get_option('headlineengine_powerwords_list', '') ?></textarea>
+                        <div><?php _e("Enter each powerword on a new line. Case is ignored.", "headlineengine") ?></div>
                         
                     </td>
                 </tr>
                 <!-- <tr>
-                    <th scope="row"><?= _e("Developer Mode", "headlineengine") ?></th>
+                    <th scope="row"><?php _e("Developer Mode", "headlineengine") ?></th>
                     <td>
-                        <input type="checkbox" name="headlineengine_developer_mode" value="1" <?= get_option('headlineengine_developer_mode', 0) ? 'checked' : '' ?>>
+                        <input type="checkbox" name="headlineengine_developer_mode" value="1" <?php get_option('headlineengine_developer_mode', 0) ? 'checked' : '' ?>>
                     </td>
                 </tr> -->
             </tbody>
         </table>
-        <?=	submit_button(); ?>
+        <?php submit_button(); ?>
     </form>
 </div>
