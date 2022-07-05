@@ -35,7 +35,7 @@ class HeadlineEnginePost {
         $script .= "var headlineengine_length_range_min = " . intval(get_option('headlineengine_length_range_min', 40)) . ";";
         $script .= "var headlineengine_length_target = " . intval(get_option('headlineengine_length_target', 82)) . ";";
         $script .= "var headlineengine_length_range_max = " . intval(get_option('headlineengine_length_range_max', 90)) . ";";
-        $script .= "var headlineengine_powerwords_api = '/wp-json/headlineengine/v1/powerwords';";
+        $script .= "var headlineengine_powerwords_api = '" . get_rest_url( null, "/headlineengine/v1/powerwords") . "';";
         wp_add_inline_script('headlineengine-post-script', $script, 'before');
     }
 
