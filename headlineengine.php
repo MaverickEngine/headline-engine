@@ -32,6 +32,12 @@ function headlineengine_admin_init() {
 }
 add_action( 'init', 'headlineengine_admin_init' );
 
+function headlineengine_api_init() {
+    require_once(plugin_dir_path( __FILE__ ) . 'includes/api/headlineengine-api.php' );
+    new HeadlineEngineAPI();
+}
+add_action( 'init', 'headlineengine_api_init' );
+
 // function taxonomy_engine_navigation_init() {
 //     require_once(plugin_basename('includes/navigation/taxonomyengine-navigation.php' ) );
 //     $taxonomyengine_globals["taxonomyengine_navigation"] = new TaxonomyEngineNavigation($taxonomyengine_globals);
