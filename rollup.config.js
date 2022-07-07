@@ -57,6 +57,27 @@ export default [
 		]
 	},
 	{
+		input: "src/headlineengine-gutenberg.js",
+		output: [
+			{
+				sourcemap: true,
+				format: 'iife',
+				name: "headlineengine_gutenberg",
+				file: "dist/headlineengine-gutenberg.js"
+			},
+		],
+		plugins: [
+			scss(),
+			css({ output: "headlineengine-gutenberg.css" }),
+			nodeResolve({
+				browser: true,
+			}),
+			commonjs(),
+			!production && serve(),
+			production && terser()
+		]
+	},
+	{
 		input: "src/headlineengine-admin.js",
 		output: [
 			{
@@ -67,8 +88,6 @@ export default [
 			},
 		],
 		plugins: [
-			scss(),
-			css({ output: "headlineengine-post.css" }),
 			nodeResolve({
 				browser: true,
 			}),

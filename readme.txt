@@ -3,7 +3,7 @@ Contributors: jasonny
 Tags: headline, title, readability
 Requires at least: 
 Tested up to: 6.0
-Stable tag: 0.0.3
+Stable tag: 0.1.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -38,6 +38,9 @@ Powerwords are emotional words. You can set your own, or use the words from [Ran
 2. Customise settings to suit your audience.
 
 == Changelog ==
+
+= 0.1.0 =
+* Gutenberg Block Editor support
 
 = 0.0.3 =
 * The scoring is now more nuanced

@@ -1,16 +1,18 @@
-import "./headlineengine-post-style.scss";
+import "./headlineengine-gutenberg.scss";
 import calc_score from "./headlineengine-score";
+
+const title_descriptor = ".wp-block-post-title";
 
 async function main() {
     async function display_analysis(container) {
-        const title = jQuery("#title").val();
+        const title = jQuery(title_descriptor)[0].innerText;
         if (!title) {
             container.html("");
             return;
         }
         const score = await calc_score(title);
         const score_el = jQuery(`
-        <div class='headlineengine-score'>
+        <div class='headlineengine-score headlineengine-score-${score.rating}'>
             <div class='headlineengine-score-value headlineengine-score-value-${score.rating}'>${ Math.floor(score.total_score * 100) }</div>
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
@@ -23,15 +25,29 @@ async function main() {
         container.append(analysis);
     }
     jQuery(async () => {
-        const titlewrap_el = jQuery("#titlewrap");
+        // wait for title_descriptor to be loaded
+        let title_descriptor_el = jQuery(title_descriptor);
+        while (!title_descriptor_el.length) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            title_descriptor_el = jQuery(title_descriptor);
+        }
+        const titlewrap_el = jQuery(".edit-post-visual-editor__post-title-wrapper");
         const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
         titlewrap_el.after(headline_score_container_el);
+        headline_score_container_el.hide();
         display_analysis(headline_score_container_el);
-        jQuery("#title").on("keyup", function(e) {
+        jQuery(title_descriptor).on("keyup", function(e) {
             display_analysis(headline_score_container_el);
         })
+        jQuery(title_descriptor).on("focus", function(e) {
+            headline_score_container_el.stop().stop();
+            display_analysis(headline_score_container_el);
+            headline_score_container_el.slideDown();
+        })
+        jQuery(title_descriptor).on("blur", function(e) {
+            headline_score_container_el.delay(1000).slideUp();
+        })
     });
-    
 }
 
 main();
