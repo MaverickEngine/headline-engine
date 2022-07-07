@@ -34,8 +34,9 @@ Powerwords are emotional words. You can set your own, or use the words from [Ran
 
 == Screenshots ==
 
-1. HeadlineEngine in action.
-2. Customise settings to suit your audience.
+1. HeadlineEngine in the Gutenberg editor.
+2. HeadlineEngine in the Classic editor.
+3. Customise settings to suit your audience.
 
 == Changelog ==
 
