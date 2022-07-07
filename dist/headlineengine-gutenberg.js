@@ -213,9 +213,8 @@
 	        });
 	        title_descriptor_el.on("focus", function(e) {
 	            headline_score_container_el.stop().stop();
-	            if (display_analysis(headline_score_container_el)) {
-	            	headline_score_container_el.slideDown();
-				}
+	            display_analysis(headline_score_container_el);
+	            headline_score_container_el.slideDown();
 	        });
 	        title_descriptor_el.on("blur", function(e) {
 	            headline_score_container_el.delay(1000).slideUp();
