@@ -176,9 +176,9 @@
 	async function main() {
 	    async function display_analysis(container) {
 	        const title = jQuery(title_descriptor)[0].innerText;
-	        if (!title) {
+	        if (!title || !title.trim().length) {
 	            container.html("");
-	            return;
+	            return false;
 	        }
 	        const score = await calc_score(title);
 	        const score_el = jQuery(`
@@ -193,6 +193,7 @@
         </div>`);
 	        container.html(score_el);
 	        container.append(analysis);
+	        return true;
 	    }
 	    jQuery(async () => {
 	        // wait for title_descriptor to be loaded
@@ -205,16 +206,18 @@
 	        const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
 	        titlewrap_el.after(headline_score_container_el);
 	        headline_score_container_el.hide();
-	        display_analysis(headline_score_container_el);
-	        jQuery(title_descriptor).on("keyup", function(e) {
-	            display_analysis(headline_score_container_el);
-	        });
-	        jQuery(title_descriptor).on("focus", function(e) {
-	            headline_score_container_el.stop().stop();
-	            display_analysis(headline_score_container_el);
+	        if (display_analysis(headline_score_container_el)) {
 	            headline_score_container_el.slideDown();
+	        }        title_descriptor_el.on("keyup", function(e) {
+	            display_analysis(headline_score_container_el);
 	        });
-	        jQuery(title_descriptor).on("blur", function(e) {
+	        title_descriptor_el.on("focus", function(e) {
+	            headline_score_container_el.stop().stop();
+	            if (display_analysis(headline_score_container_el)) {
+	            	headline_score_container_el.slideDown();
+				}
+	        });
+	        title_descriptor_el.on("blur", function(e) {
 	            headline_score_container_el.delay(1000).slideUp();
 	        });
 	    });
