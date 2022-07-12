@@ -5,7 +5,7 @@
 * Description: What makes a good headline? Get instant headline analysis based on readability, length, and powerwords. Brought to you by MavEngine, &lt;em&gt;Powering Media. 
 * Author: MavEngine
 * Author URI: https://mavengine.com
-* Version: 0.1.1
+* Version: 0.1.2
 * License: GPLv2 or later
 * License URI: https://www.gnu.org/licenses/gpl-3.0.html
 * WC requires at least: 5.8.0
@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const HEADLINEENGINE_SCRIPT_VERSION = "0.1.1";
+const HEADLINEENGINE_SCRIPT_VERSION = "0.1.2";
 
 function headlineengine_admin_init() {
     if (!is_admin()) {
