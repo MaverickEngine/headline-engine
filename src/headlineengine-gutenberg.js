@@ -1,11 +1,11 @@
 import "./headlineengine-gutenberg.scss";
 import calc_score from "./headlineengine-score";
 
-const title_descriptor = ".wp-block-post-title";
+const title_descriptor = ".editor-post-title__input";
 
 async function main() {
     async function display_analysis(container) {
-        const title = jQuery(title_descriptor)[0].innerText;
+        const title = jQuery(title_descriptor).first().text();
         if (!title || !title.trim().length) {
             container.html("");
             return false;

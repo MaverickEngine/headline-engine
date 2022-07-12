@@ -171,11 +171,13 @@
 	    };
 	}
 
-	const title_descriptor = ".wp-block-post-title";
+	const title_descriptor = ".editor-post-title__input";
 
 	async function main() {
 	    async function display_analysis(container) {
-	        const title = jQuery(title_descriptor)[0].innerText;
+	        console.log("Here", title_descriptor, jQuery(title_descriptor).first().text());
+	        const title = jQuery(title_descriptor).first().text();
+	        console.log({ title });
 	        if (!title || !title.trim().length) {
 	            container.html("");
 	            return false;
