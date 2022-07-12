@@ -175,9 +175,7 @@
 
 	async function main() {
 	    async function display_analysis(container) {
-	        console.log("Here", title_descriptor, jQuery(title_descriptor).first().text());
 	        const title = jQuery(title_descriptor).first().text();
-	        console.log({ title });
 	        if (!title || !title.trim().length) {
 	            container.html("");
 	            return false;
