@@ -1,5 +1,5 @@
-import "wordsmith-js/dist/wordsmith.min.js";
 import LinearScale from "linear-scale";
+import lang from "./headlineengine-lang";
 
 let powerword_list = null;
 
@@ -18,6 +18,7 @@ function calc_total_score(curr, target, range) {
         local_curr = curr - target;
     }
     const scale = LinearScale(local_range, [0, 1]);
+    console.log({curr, target, range, local_range, local_curr, scale: scale(local_curr)});
     return scale(local_curr);
 }
 
@@ -43,7 +44,7 @@ async function calc_score(headline) {
 
     function readability(title) {
         if (!title) return;
-        const ease_score = Wordsmith.fleschReadingEaseScore(title);
+        const ease_score = lang.fleschReadingEaseScore(title);
         let rating = 0;
         if (ease_score < readable_range_min) {
             rating = 2;
@@ -90,5 +91,52 @@ async function calc_score(headline) {
         rating
     };
 }
+
+// Tests
+async function tests() {
+    const scores = [
+        {
+            val: 50,
+            target: 50,
+            range: [0, 100],
+            expected: 1
+        },
+        {
+            val: 50,
+            target: 25,
+            range: [0, 50],
+            expected: 0
+        },
+        {
+            val: 50,
+            target: 50,
+            range: [50, 100],
+            expected: 1
+        }
+    ];
+    scores.forEach(score => {
+        console.assert(calc_total_score(score.val, score.target, score.range) === score.expected, `calc_total_score(${score.val}, ${score.target}, [${score.range[0]}, ${score.range[1]}]) !== ${score.expected}; ${calc_total_score(score.val, score.target, score.range)}`);
+    });
+    // const tests = [
+    //     {
+    //         headline: "Eight years of whistle-blower trauma; former SARS executive Johann van Loggerenberg",
+    //         length: { score: 1, rating: "good", length: 19, message: "Good", pass: true },
+    //         readability: { score: 1, rating: "good", ease_score: 55, message: "Good", pass: true },
+    //         powerwords: { score: 1, rating: 1, words: ["this", "is", "a", "test", "headline"], pass: true }
+    //     },
+    //     {
+    //         headline: "This is a test headline",
+    //         length: { score: 1, rating: "good", length: 19, message: "Good", pass: true },
+    //         readability: { score: 1, rating: "good", ease_score: 55, message: "Good", pass: true },
+    //         powerwords: { score: 1, rating: 1, words: ["this", "is", "a", "test", "headline"], pass: true }
+    //     }
+    // ];
+    // tests.forEach(async test => {
+    //     const result = await calc_score(test.headline);
+    //     console.log(result);
+    // }
+    // );
+}
+tests();
 
 export default calc_score;
