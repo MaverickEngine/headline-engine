@@ -14,7 +14,7 @@ function calc_total_score(curr, target, range) {
         local_range = [0, target - min];
         local_curr = curr - min;
     } else {
-        local_range = [0, max - target];
+        local_range = [max - target, 0];
         local_curr = curr - target;
     }
     const scale = LinearScale(local_range, [0, 1]);
@@ -112,6 +112,12 @@ async function tests() {
             target: 50,
             range: [50, 100],
             expected: 1
+        },
+        {
+            val: 75,
+            target: 50,
+            range: [0, 100],
+            expected: 0.5
         }
     ];
     scores.forEach(score => {

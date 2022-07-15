@@ -1777,6 +1777,19 @@
 	        fleschKincaidGradeLevel: 3,
 	    }];
 	    for (let headline of headlines) {
+	        console.assert(HeadlineEngineLang.formatSentence(headline.headline) === headline.formatted, `HeadlineEngineLang.formatSentence failed - expected ${headline.formatted}, got ${HeadlineEngineLang.formatSentence(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.wordCount(headline.headline) === headline.words, `HeadlineEngineLang.wordCount failed - expected ${headline.words}, got ${HeadlineEngineLang.wordCount(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.syllableCount(headline.headline) === headline.syllables, `HeadlineEngineLang.syllableCount failed - expected ${headline.syllables}, got ${HeadlineEngineLang.syllableCount(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.sentenceCount(headline.headline) === headline.sentences, `HeadlineEngineLang.sentenceCount failed - expected ${headline.sentences}, got ${HeadlineEngineLang.sentenceCount(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.fleschReadingEaseScore(headline.headline) === headline.fleschReadingEaseScore, `HeadlineEngineLang.fleschReadingEaseScore failed - expected ${headline.fleschReadingEaseScore}, got ${HeadlineEngineLang.fleschReadingEaseScore(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.fleschKincaidGradeLevel(headline.headline) === headline.fleschKincaidGradeLevel, `HeadlineEngineLang.fleschKincaidGradeLevel failed - expected ${headline.fleschKincaidGradeLevel}, got ${HeadlineEngineLang.fleschKincaidGradeLevel(headline.headline)} for "${headline.headline}"`);
+
+	        console.assert(HeadlineEngineLang.letterCount(headline.headline) === headline.letters, `HeadlineEngineLang.letterCount failed - expected ${headline.letters}, got ${HeadlineEngineLang.letterCount(headline.headline)} for "${headline.headline}"`);
 	    }
 	}
 
@@ -1795,16 +1808,18 @@
 	        local_range = [0, target - min];
 	        local_curr = curr - min;
 	    } else {
-	        local_range = [0, max - target];
+	        local_range = [max - target, 0];
 	        local_curr = curr - target;
 	    }
 	    const scale = LinearScale(local_range, [0, 1]);
+	    console.log({curr, target, range, local_range, local_curr, scale: scale(local_curr)});
 	    return scale(local_curr);
 	}
 
 	async function get_powerwords() {
 	    if (powerword_list) return powerword_list; // Cached?
 	    const headlineengine_powerwords_list = await jQuery.get(headlineengine_powerwords_api).catch(err => {
+	        console.log("Could not load powerwords list");
 	        return [];
 	    });
 	    return headlineengine_powerwords_list.map(w => w.toLowerCase());
@@ -1873,6 +1888,35 @@
 
 	// Tests
 	async function tests() {
+	    const scores = [
+	        {
+	            val: 50,
+	            target: 50,
+	            range: [0, 100],
+	            expected: 1
+	        },
+	        {
+	            val: 50,
+	            target: 25,
+	            range: [0, 50],
+	            expected: 0
+	        },
+	        {
+	            val: 50,
+	            target: 50,
+	            range: [50, 100],
+	            expected: 1
+	        },
+	        {
+	            val: 75,
+	            target: 50,
+	            range: [0, 100],
+	            expected: 0.5
+	        }
+	    ];
+	    scores.forEach(score => {
+	        console.assert(calc_total_score(score.val, score.target, score.range) === score.expected, `calc_total_score(${score.val}, ${score.target}, [${score.range[0]}, ${score.range[1]}]) !== ${score.expected}; ${calc_total_score(score.val, score.target, score.range)}`);
+	    });
 	    // const tests = [
 	    //     {
 	    //         headline: "Eight years of whistle-blower trauma; former SARS executive Johann van Loggerenberg",

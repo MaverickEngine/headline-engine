@@ -48,8 +48,8 @@
 }
 
 .headlineengine-score-value-bad {
-  background-color: rgba(255, 0, 0, 0.2);
-  border-color: rgba(255, 0, 0, 0.6);
+  background-color: rgb(179, 179, 179);
+  border-color: rgba(109, 109, 109, 0.6);
 }
 
 .headlineengine-score-value-okay {

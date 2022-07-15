@@ -23,8 +23,8 @@
   border-color: rgba(31, 120, 31, 0.2);
 }
 #headlineengine-score-container .headlineengine-score-bad {
-  background-color: rgba(255, 0, 0, 0.6);
-  border-color: rgba(255, 0, 0, 0.6);
+  background-color: rgb(179, 179, 179);
+  border-color: rgba(109, 109, 109, 0.6);
 }
 #headlineengine-score-container .headlineengine-score-okay {
   background-color: rgba(250, 180, 10, 0.6);
