@@ -2,8 +2,6 @@
 
 A/B Headline Testing for Wordpress
 
-NB: This plugin is pre-Alpha. It doesn't work at all. Don't install it!
-
 ## Features
 - Ability to enter multiple headlines;
 - Instant scoring feedback while entering headlines;
