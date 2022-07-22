@@ -9,7 +9,7 @@ import css from 'rollup-plugin-css-only';
 import { nodeResolve } from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import strip from '@rollup/plugin-strip';
-
+import typescript from '@rollup/plugin-typescript';
 
 const production = !process.env.ROLLUP_WATCH;
 const test = process.env.NODE_ENV === 'test';
@@ -50,28 +50,6 @@ if (test) {
 } else {
 	config = [
 		{
-			input: "src/headlineengine-post.js",
-			output: [
-				{
-					sourcemap: true,
-					format: 'iife',
-					name: "headlineengine_post",
-					file: "dist/headlineengine-post.js"
-				},
-			],
-			plugins: [
-				scss(),
-				css({ output: "headlineengine-post.css" }),
-				nodeResolve({
-					browser: true,
-				}),
-				commonjs(),
-				json(),
-				!production && serve(),
-				production && terser() && strip()
-			]
-		},
-		{
 			input: "src/headlineengine-gutenberg.js",
 			output: [
 				{
@@ -88,6 +66,7 @@ if (test) {
 					browser: true,
 				}),
 				commonjs(),
+				typescript(),
 				json(),
 				!production && serve(),
 				production && terser() && strip()

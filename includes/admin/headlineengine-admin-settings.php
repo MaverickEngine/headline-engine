@@ -2,13 +2,24 @@
 class HeadlineEngineAdminSettings {
     private $options = [
         "headlineengine_post_types",
+        "headlineengine_readability_enable",
         "headlineengine_readability_range_min",
         "headlineengine_readability_target",
         "headlineengine_readability_range_max",
+        "headlineengine_length_enable",
         "headlineengine_length_range_min",
         "headlineengine_length_target",
         "headlineengine_length_range_max",
+        "headlineengine_powerwords_enable",
         "headlineengine_powerwords_list",
+        "headlineengine_reading_grade_enable",
+        "headlineengine_reading_grade_target",
+        "headlineengine_reading_grade_range_min",
+        "headlineengine_reading_grade_range_max",
+        "headlineengine_wordcount_enable",
+        "headlineengine_wordcount_target",
+        "headlineengine_wordcount_range_min",
+        "headlineengine_wordcount_range_max",
     ];
     
     public function __construct() {

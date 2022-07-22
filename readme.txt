@@ -3,7 +3,7 @@ Contributors: jasonny
 Tags: headline, title, readability
 Requires at least: 
 Tested up to: 6.0
-Stable tag: 0.1.3
+Stable tag: 0.2.0
 Requires PHP: 7.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -16,17 +16,23 @@ HeadlineEngine is part of a suite of tools for news publishers, built by [MavEng
 
 It analyses your headline as you type it and provides a score, based on the readability (how complex it is), length (how long it is), and powerwords (how many words it contains).
 
-_Note: This plugin only works in the Classic Editor. We will have a version for Gutenberg soon._
-
 == Features ==
 
 = Readability =
 
 We use the [Flesch Kincaid](https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests) formula to calculate readability. A good range of not too complex or too simple would be between 45 and 90. This is configurable in the system.
 
+= Reading Grade =
+
+We use the [Flesch Kincaid](https://en.wikipedia.org/wiki/Flesch%E2%80%93Kincaid_readability_tests) formula to calculate reading grade. This is configurable in the system.
+
 = Length =
 
-You should aim for a letter count in the low-80s, which is about 12 words. We recommend between 40 and 90 characters. This is configurable in the system.
+You should aim for a letter count in the mid-80s. We recommend between 40 and 90 characters. This is configurable in the system.
+
+= Word Count =
+
+Our analysis of best-performing headlines shows that the ideal limit for a news article is around 12 to 14 words. This is configurable in the system.
 
 = Powerwords =
 
@@ -39,6 +45,18 @@ Powerwords are emotional words. You can set your own, or use the words from [Ran
 3. Customise settings to suit your audience.
 
 == Changelog ==
+
+= 0.2.0 =
+* Complete refactor
+* Seperate scorers to make it easy to add more
+* Move most of the code to Typescript
+* Scorer: Word count
+* Scorer: Reading grade
+* Replace MathRank Powerword list with our own Powerword list
+* Single Javascript and CSS for both Classic and Gutenberg
+* Colour fade
+* Only calculate on 0.5 sec delay or space
+* Don't hide score if mouseovering title block
 
 = 0.1.3 =
 * Fix issue with calculating scores above target

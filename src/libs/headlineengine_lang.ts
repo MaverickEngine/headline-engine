@@ -2,7 +2,7 @@
 import {syllable} from "syllable";
 
 class HeadlineEngineLang {
-    static formatSentence(sentence) {
+    static formatSentence(sentence: string): string {
         let s = sentence.replace(/[^a-zA-Z0-9]/g, " ").toLowerCase().trim();
         while(s.includes("  ")) {
             s = s.replace("  ", " ");
@@ -10,33 +10,33 @@ class HeadlineEngineLang {
         return s;
     }
 
-    static wordCount(sentence) {
+    static wordCount(sentence: string): number {
         return this.formatSentence(sentence).split(" ").length;
     }
 
-    static syllableCount(sentence) {        
+    static syllableCount(sentence: string): number {
         return syllable(this.formatSentence(sentence));
     }
 
-    static sentenceCount(sentence) {
-        return sentence.match(/[^!?.;]+/g || []).length;
+    static sentenceCount(sentence: string): number {
+        return (sentence.match(/[^!?.;]+/g) || []).length;
     }
 
-    static fleschReadingEaseScore(sentence) {
+    static fleschReadingEaseScore(sentence: string): number {
         var wordCount = this.wordCount(sentence);
         var sentenceCount = this.sentenceCount(sentence);
         var syllableCount = this.syllableCount(sentence);
         return Math.round(206.835 - 1.015 * (wordCount / sentenceCount) - 84.6 * (syllableCount / wordCount));
     }
 
-    static fleschKincaidGradeLevel(sentence) {
+    static fleschKincaidGradeLevel(sentence: string): number {
         var wordCount = this.wordCount(sentence);
         var sentenceCount = this.sentenceCount(sentence);
         var syllableCount = this.syllableCount(sentence);
         return Math.round(0.39 * (wordCount / sentenceCount) + 11.8 * (syllableCount / wordCount) - 15.59);
     }
 
-    static letterCount(sentence, ignoreSpaces = false) {
+    static letterCount(sentence: string, ignoreSpaces: boolean = false): number {
         if (ignoreSpaces) {
             return this.formatSentence(sentence).replace(/ /g, "").length;
         }

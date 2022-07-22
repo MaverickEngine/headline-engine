@@ -77,6 +77,25 @@
 
 	var LinearScale = linearScale.exports;
 
+	function calc_total_score(curr, target, range) {
+	    const min = Math.min(range[0], range[1]);
+	    const max = Math.max(range[0], range[1]);
+	    if (curr < min || curr > max) return 0;
+	    if (curr === target) return 1;
+	    let local_range;
+	    let local_curr;
+	    if (curr < target) {
+	        local_range = [0, target - min];
+	        local_curr = curr - min;
+	    } else {
+	        local_range = [max - target, 0];
+	        local_curr = curr - target;
+	    }
+	    const scale = LinearScale(local_range, [0, 1]);
+	    // console.log({curr, target, range, local_range, local_curr, scale: scale(local_curr)});
+	    return scale(local_curr);
+	}
+
 	function commonjsRequire(path) {
 		throw new Error('Could not dynamically require "' + path + '". Please configure the dynamicRequireTargets or/and ignoreDynamicRequires option of @rollup/plugin-commonjs appropriately for this require call to work.');
 	}
@@ -1797,24 +1816,7 @@
 
 	let powerword_list = null;
 
-	function calc_total_score(curr, target, range) {
-	    const min = Math.min(range[0], range[1]);
-	    const max = Math.max(range[0], range[1]);
-	    if (curr < min || curr > max) return 0;
-	    if (curr === target) return 1;
-	    let local_range;
-	    let local_curr;
-	    if (curr < target) {
-	        local_range = [0, target - min];
-	        local_curr = curr - min;
-	    } else {
-	        local_range = [max - target, 0];
-	        local_curr = curr - target;
-	    }
-	    const scale = LinearScale(local_range, [0, 1]);
-	    console.log({curr, target, range, local_range, local_curr, scale: scale(local_curr)});
-	    return scale(local_curr);
-	}
+
 
 	async function get_powerwords() {
 	    if (powerword_list) return powerword_list; // Cached?
@@ -1865,8 +1867,9 @@
 	    function powerwords(title) {
 	        if (!title) return;
 	        title = title.toLowerCase().replace(/[^a-z]/g, " ");
-	        const words = title.split(" ").filter(w => w.length > 3);
-	        const powerwords_found = words.filter(w => powerword_list.includes(w));
+	        const regex = new RegExp(powerword_list.map(w => `\\b${w}(ed)?(s)?\\b`).join("|"));
+	        const powerwords_found = (title.match(regex, "i") || []).filter(p => (p));
+	        // console.log({powerwords_found});
 	        const score = powerwords_found.length ? 1 : 0;
 	        return { score, rating: powerwords_found.length, words: powerwords_found, pass: powerwords_found.length > 0 };
 	    }

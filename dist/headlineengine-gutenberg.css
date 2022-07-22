@@ -37,3 +37,8 @@
 #headlineengine-score-container .headlineengine-score-title {
   line-height: 110%;
 }
+#headlineengine-score-container .headlineengine-divisor {
+  border-top: 2px solid #3c434a;
+  margin-top: 3px;
+  padding-top: 3px;
+}
