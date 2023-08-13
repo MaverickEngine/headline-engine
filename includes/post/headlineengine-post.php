@@ -18,9 +18,12 @@ class HeadlineEnginePost {
     }
 
     public function enqueue_scripts() {
-        if (!in_array(get_post_type(), get_option('headlineengine_post_types'))) {
+        $headlineengine_post_types = get_option('headlineengine_post_types');
+        
+        if ( !$headlineengine_post_types || !in_array( get_post_type(), $headlineengine_post_types ) ) {
             return false;
         }
+
         wp_enqueue_script( "headlineengine-post-script", plugin_dir_url(__FILE__) . "../../dist/headlineengine-gutenberg.js", [], HEADLINEENGINE_SCRIPT_VERSION, true );
         wp_enqueue_style( "headlineengine-post-style", plugin_dir_url(__FILE__) . "../../dist/headlineengine-gutenberg.css", [], HEADLINEENGINE_SCRIPT_VERSION );
         $script = "var headlineengine_readability_range_min = " . intval(get_option('headlineengine_readability_range_min', 45)) . ";";
