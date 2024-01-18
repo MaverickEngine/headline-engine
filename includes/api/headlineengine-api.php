@@ -9,6 +9,7 @@ class HeadlineEngineAPI {
         register_rest_route( 'headlineengine/v1', '/powerwords', array(
             'methods' => 'GET',
             'callback' => array( $this, 'powerwords' ),
+            'permission_callback' => '__return_true'
         ) );
     }
 
