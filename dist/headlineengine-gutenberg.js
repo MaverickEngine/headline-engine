@@ -2256,12 +2256,9 @@
 
     function get_content() {
         if (jQuery("#titlewrap").length) { // Classic editor
-            console.log("Classic editor");
             if (jQuery(".wp-editor-area").is(":visible")) { // The code editor is visible
-                console.log("Code editor");
                 return jQuery(".wp-editor-area").val();
             } else if (window.tinymce) { // The visual editor is visible
-                console.log("TinyMCE editor");
                 let content = tinymce.editors.content.getContent();
                 if (content.length > 0) {
                     return content;
@@ -2276,7 +2273,6 @@
     class HeadlineEngineSuggest extends EventTarget {
         constructor() {
             super();
-            console.log("HeadlineEngineSuggest");
         }
 
         button() {
@@ -2289,7 +2285,6 @@
 
         emit(event, data) {
             const eventObj = new CustomEvent(event, { detail: data });
-            console.log("Emitting event", eventObj);
             this.dispatchEvent(eventObj);
         }
 
@@ -2307,10 +2302,8 @@
                     type: "headline"
                 };
                 const response = await apiPost_1("headlineengine/v1/suggest", data);
-                console.log(response);
                 this.emit("success", response);
             } catch (error) {
-                console.error(error);
                 this.emit("error", error);
             }
         }
@@ -2375,7 +2368,6 @@
                 titlewrap_descriptor = "#titlewrap";
             }
             if (!jQuery(title_descriptor)) {
-                console.log("Could not find title descriptor");
                 return; // Could not find title element
             }
             let title_descriptor_el = jQuery(title_descriptor);
