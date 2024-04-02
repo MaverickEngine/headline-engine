@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-const HEADLINEENGINE_SCRIPT_VERSION = "0.2.1";
+const HEADLINEENGINE_SCRIPT_VERSION = "0.2.2";
 
 function headlineengine_admin_init() {
     if (!is_admin()) {

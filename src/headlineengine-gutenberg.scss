@@ -45,3 +45,35 @@
         padding-top: 3px;
     }
 }
+
+.headlineengine-suggest-results {
+    position: absolute;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    width: 100%;
+    max-width: 650px;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    .headlineengine-suggest-result {
+        padding: 10px;
+        border-bottom: 1px solid #ccc;
+        cursor: pointer;
+        &:hover {
+            background-color: #f9f9f9;
+        }
+    }
+}
+
+.headlineengine-suggest-button {
+    margin-left: 10px;
+    border-radius: 3px;
+    border-color: #2271b1;
+    background-color: #2271b1;
+    color: #fff;
+    cursor: pointer;
+    &:hover {
+        background-color: #135e96;
+    }
+    
+}
