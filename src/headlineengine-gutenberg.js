@@ -1,6 +1,7 @@
 import "./headlineengine-gutenberg.scss";
 import Calc_Score from "./headlineengine-score.ts";
 import LinearScale from "linear-scale";
+import { HeadlineEngineSuggest } from "./headlineengine-suggest.js";
 
 let editor_type = "gututenberg";
 
@@ -43,6 +44,7 @@ async function main() {
         // </div>`);
         
         // container.append(analysis);
+        suggest(container);
         return true;
     }
     jQuery(async () => {
@@ -106,6 +108,53 @@ async function main() {
         })
         // await display_analysis(headline_score_container_el, title_descriptor);
     });
+}
+
+function suggest(container) {
+    const suggest = new HeadlineEngineSuggest();
+        const suggestButton = document.createElement('button');
+        const resultsContainer = document.createElement('div');
+        resultsContainer.classList.add("headlineengine-suggest-results");
+        resultsContainer.style.display = "none";
+        suggestButton.innerText = 'Suggest';
+        suggestButton.classList.add("headlineengine-suggest-button");
+        suggestButton.addEventListener('click', suggest.suggest.bind(suggest));
+        suggest.addEventListener("start", function() {
+            suggestButton.disabled = true;
+            suggestButton.innerText = "Suggesting...";
+        });
+        suggest.addEventListener("success", function(e) {
+            suggestButton.disabled = false;
+            suggestButton.innerText = "Suggest";
+            const response = e.detail;
+            resultsContainer.innerHTML = "";
+            for (let headline of response) {
+                const headlineEl = document.createElement("div");
+                headlineEl.classList.add("headlineengine-suggest-result");
+                headlineEl.innerText = headline;
+                headlineEl.addEventListener("click", function() {
+                    const title = jQuery('input[name="post_title"]').first();
+                    title.val(headline);
+                    title.trigger("input");
+                });
+                resultsContainer.append(headlineEl);
+            }
+            // Close when we click outside
+            jQuery(document).on("click", function(e) {
+                resultsContainer.style.display = "none";
+                jQuery(document).off("click");
+            });
+            resultsContainer.style.display = "block";
+        });
+        suggest.addEventListener("error", function(e) {
+            suggestButton.disabled = false;
+            suggestButton.innerText = "Suggest";
+            const error = e.detail;
+            alert(error);
+        });
+        container.append(suggestButton);
+        // container.append(resultsContainer);
+        jQuery(container).parent().append(resultsContainer);
 }
 
 main();

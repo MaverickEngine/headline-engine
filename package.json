@@ -1,6 +1,6 @@
 {
   "name": "headline-engine",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "",
   "main": "rollup.config.js",
   "scripts": {
@@ -22,7 +22,9 @@
   "homepage": "https://github.com/MaverickEngine/headline-engine#readme",
   "dependencies": {
     "linear-scale": "0.0.3",
-    "syllable": "^5.0.0"
+    "syllable": "^5.0.0",
+    "openai": "^3.0.0",
+    "wp-ajax": "^0.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^22.0.1",

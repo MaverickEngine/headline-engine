@@ -2134,6 +2134,183 @@
     // tests();
     // export default calc_score;
 
+    var ajax = {};
+
+    Object.defineProperty(ajax, "__esModule", { value: true });
+    ajax.apiPut = ajax.apiDelete = ajax.apiGet = apiPost_1 = ajax.apiPost = void 0;
+    function handleError(response) {
+        if (!response.ok) {
+            const status = response.status;
+            const message = response.responseJSON?.message || response.statusText || response.responseText || response;
+            const code = response.responseJSON?.code || response.code || "";
+            return { status, code, message };
+        }
+        return response;
+    }
+    function apiPost(path, data, headers = {}) {
+        return new Promise((resolve, reject) => {
+            wp.apiRequest({
+                path,
+                data,
+                type: "POST",
+                headers
+            })
+                .done(async (response) => {
+                if (response.error) {
+                    reject(response);
+                }
+                resolve(response);
+            })
+                .fail(async (response) => {
+                reject(handleError(response));
+            });
+        });
+    }
+    var apiPost_1 = ajax.apiPost = apiPost;
+    function apiGet(path, headers = {}) {
+        return new Promise((resolve, reject) => {
+            wp.apiRequest({
+                path,
+                type: "GET",
+                headers
+            })
+                .done(async (response) => {
+                if (response.error) {
+                    reject(response);
+                }
+                resolve(response);
+            })
+                .fail(async (response) => {
+                reject(handleError(response));
+            });
+        });
+    }
+    ajax.apiGet = apiGet;
+    function apiDelete(path, headers = {}) {
+        return new Promise((resolve, reject) => {
+            wp.apiRequest({
+                path,
+                type: "DELETE",
+                headers
+            })
+                .done(async (response) => {
+                if (response.error) {
+                    reject(response);
+                }
+                resolve(response);
+            })
+                .fail(async (response) => {
+                reject(handleError(response));
+            });
+        });
+    }
+    ajax.apiDelete = apiDelete;
+    function apiPut(path, data, headers = {}) {
+        return new Promise((resolve, reject) => {
+            wp.apiRequest({
+                path,
+                data,
+                type: "PUT",
+                headers
+            })
+                .done(async (response) => {
+                if (response.error) {
+                    reject(response);
+                }
+                resolve(response);
+            })
+                .fail(async (response) => {
+                reject(handleError(response));
+            });
+        });
+    }
+    ajax.apiPut = apiPut;
+
+    function strip_tags(html) {
+        let tmp = document.createElement("div");
+        tmp.innerHTML = html
+            .replace(/(<(br[^>]*)>)/ig, '\n')
+            .replace(/(<(p[^>]*)>)/ig, '\n')
+            .replace(/(<(div[^>]*)>)/ig, '\n')
+            .replace(/(<(h[1-6][^>]*)>)/ig, '\n')
+            .replace(/(<(li[^>]*)>)/ig, '\n')
+            .replace(/(<(ul[^>]*)>)/ig, '\n')
+            .replace(/(<(ol[^>]*)>)/ig, '\n')
+            .replace(/(<(blockquote[^>]*)>)/ig, '\n')
+            .replace(/(<(pre[^>]*)>)/ig, '\n')
+            .replace(/(<(hr[^>]*)>)/ig, '\n')
+            .replace(/(<(table[^>]*)>)/ig, '\n')
+            .replace(/(<(tr[^>]*)>)/ig, '\n')
+            .replace(/(<(td[^>]*)>)/ig, '\n')
+            .replace(/(<(th[^>]*)>)/ig, '\n')
+            .replace(/(<(caption[^>]*)>)/ig, '\n')
+            .replace(/(<(dl[^>]*)>)/ig, '\n')
+            .replace(/(<(dt[^>]*)>)/ig, '\n')
+            .replace(/(<(dd[^>]*)>)/ig, '\n')
+            .replace(/(<(address[^>]*)>)/ig, '\n')
+            .replace(/(<(section[^>]*)>)/ig, '\n')
+            .replace(/(<(article[^>]*)>)/ig, '\n')
+            .replace(/(<(aside[^>]*)>)/ig, '\n');
+        return tmp.textContent || tmp.innerText || "";
+    }
+
+    function get_content() {
+        if (jQuery("#titlewrap").length) { // Classic editor
+            if (jQuery(".wp-editor-area").is(":visible")) { // The code editor is visible
+                return jQuery(".wp-editor-area").val();
+            } else if (window.tinymce) { // The visual editor is visible
+                let content = tinymce.editors.content.getContent();
+                if (content.length > 0) {
+                    return content;
+                }
+            }
+            return jQuery("#content").val(); // Last try...
+        } else { // Gutenberg editor
+            return wp.data.select( "core/editor" ).getEditedPostContent();
+        }
+    }
+
+    class HeadlineEngineSuggest extends EventTarget {
+        constructor() {
+            super();
+        }
+
+        button() {
+            const suggestButton = document.createElement('button');
+            suggestButton.innerText = 'Suggest';
+            suggestButton.addEventListener('click', this.suggest.bind(this));
+            
+            return suggestButton;
+        }
+
+        emit(event, data) {
+            const eventObj = new CustomEvent(event, { detail: data });
+            this.dispatchEvent(eventObj);
+        }
+
+        async suggest(e) {
+            e.preventDefault();
+            const content = strip_tags(get_content());
+            this.emit("start", content);
+            if (!content.length) {
+                this.emit("error", "Nothing to summarise yet...");
+                return;
+            }
+            try {
+                const data = {
+                    content: content,
+                    type: "headline"
+                };
+                const response = await apiPost_1("headlineengine/v1/suggest", data);
+                this.emit("success", response);
+            } catch (error) {
+                this.emit("error", error);
+            }
+        }
+
+        
+    }
+
     let editor_type = "gututenberg";
 
     async function main() {
@@ -2175,6 +2352,7 @@
             // </div>`);
             
             // container.append(analysis);
+            suggest(container);
             return true;
         }
         jQuery(async () => {
@@ -2190,7 +2368,6 @@
                 titlewrap_descriptor = "#titlewrap";
             }
             if (!jQuery(title_descriptor)) {
-                console.log("Could not find title descriptor");
                 return; // Could not find title element
             }
             let title_descriptor_el = jQuery(title_descriptor);
@@ -2237,6 +2414,53 @@
             });
             // await display_analysis(headline_score_container_el, title_descriptor);
         });
+    }
+
+    function suggest(container) {
+        const suggest = new HeadlineEngineSuggest();
+            const suggestButton = document.createElement('button');
+            const resultsContainer = document.createElement('div');
+            resultsContainer.classList.add("headlineengine-suggest-results");
+            resultsContainer.style.display = "none";
+            suggestButton.innerText = 'Suggest';
+            suggestButton.classList.add("headlineengine-suggest-button");
+            suggestButton.addEventListener('click', suggest.suggest.bind(suggest));
+            suggest.addEventListener("start", function() {
+                suggestButton.disabled = true;
+                suggestButton.innerText = "Suggesting...";
+            });
+            suggest.addEventListener("success", function(e) {
+                suggestButton.disabled = false;
+                suggestButton.innerText = "Suggest";
+                const response = e.detail;
+                resultsContainer.innerHTML = "";
+                for (let headline of response) {
+                    const headlineEl = document.createElement("div");
+                    headlineEl.classList.add("headlineengine-suggest-result");
+                    headlineEl.innerText = headline;
+                    headlineEl.addEventListener("click", function() {
+                        const title = jQuery('input[name="post_title"]').first();
+                        title.val(headline);
+                        title.trigger("input");
+                    });
+                    resultsContainer.append(headlineEl);
+                }
+                // Close when we click outside
+                jQuery(document).on("click", function(e) {
+                    resultsContainer.style.display = "none";
+                    jQuery(document).off("click");
+                });
+                resultsContainer.style.display = "block";
+            });
+            suggest.addEventListener("error", function(e) {
+                suggestButton.disabled = false;
+                suggestButton.innerText = "Suggest";
+                const error = e.detail;
+                alert(error);
+            });
+            container.append(suggestButton);
+            // container.append(resultsContainer);
+            jQuery(container).parent().append(resultsContainer);
     }
 
     main();
