@@ -2363,11 +2363,13 @@
         }
 
         async function displayAnalysis() {
+            console.log("displayAnalysis");
             const title = getTitle();
             if (!title || !title.trim().length) {
                 empty();
                 return false;
             }
+            console.log(title);
             const scores = await calc_score.score(title);
             let colour = calculateColour(scores.total_score);
             const score_el = jQuery(`
@@ -2469,16 +2471,26 @@
             await displayAnalysis();
             // Listen for changes in the title
             if (editor_type === "classic") {
-                jQuery(title_descriptor).on("input", async function() {
+                title_descriptor_el.on("keypress", async function(e) {
+                    const new_title = jQuery(title_descriptor).val();
+                    if (new_title !== title) {
+                        title = new_title;
+                        await displayAnalysis();
+                    }
+                });
+                jQuery(title_descriptor).on("change", async function() {
                     await displayAnalysis();
+                });
+            } else {
+                wp.data.subscribe(() => {
+                    const new_title = wp.data.select("core/editor").getEditedPostAttribute("title");
+                    if (new_title !== title) {
+                        title = new_title;
+                        displayAnalysis();
+                    }
                 });
             }
         }
-
-        jQuery(headline_engine_container_el).on("headline-updated", async function() {
-            console.log("Headline updated");
-            await displayAnalysis();
-        });
         
         await init();
     });
