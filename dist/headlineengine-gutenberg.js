@@ -2327,6 +2327,7 @@
         let title;
 
         // Elements
+        jQuery("<div id='headlineengine-container'></div>");
         const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
         const score_analisys_container_el = jQuery(`<div class="headlineengine-analysis"></div>`);
         headline_score_container_el.append(score_analisys_container_el);
