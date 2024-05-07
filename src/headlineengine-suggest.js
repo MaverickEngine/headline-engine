@@ -81,7 +81,7 @@ export class HeadlineEngineSuggest extends EventTarget {
                 type: "headline"
             };
             const response = await apiPost("headlineengine/v1/suggest", data);
-            console.log(response)
+            // console.log(response)
             this.emit("success", response);
         } catch (error) {
             console.error(error);

@@ -3,57 +3,150 @@ import Calc_Score from "./headlineengine-score.ts";
 import LinearScale from "linear-scale";
 import { HeadlineEngineSuggest } from "./headlineengine-suggest.js";
 
-let editor_type = "gututenberg";
-
-async function main() {
+jQuery(async () => {
+    // Constants
+    const autoHide = false;
     const calc_score = new Calc_Score();
-    async function display_analysis(container, title_descriptor) {
-        let title;
-        if (editor_type === "classic") {
-            title = jQuery(title_descriptor).val();
-        } else {
-            title = jQuery(title_descriptor).first().text();
+
+    // Variables
+    let editor_type = "gututenberg";
+    let title_descriptor = null;
+    let title;
+
+    // Elements
+    const headline_engine_container = jQuery("<div id='headlineengine-container'></div>");
+    const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
+    const score_analisys_container_el = jQuery(`<div class="headlineengine-analysis"></div>`);
+    headline_score_container_el.append(score_analisys_container_el);
+
+    function detectEditor() {
+        if (jQuery("#titlewrap").length) {
+            return "classic";
         }
-        if (!title || !title.trim().length) {
-            container.html("");
-            return false;
+        return "gutenberg";
+    }
+
+    function getTitle() {
+        if (detectEditor() === "classic") {
+            return jQuery("#title").val();
         }
-        const scores = await calc_score.score(title);
+        return wp.data.select("core/editor").getEditedPostAttribute("title");
+    }
+
+    function calculateColour(score) {
         let colour_grey = [179, 179, 179];
         let colour_green = [31, 120, 31];
         let rscale = LinearScale([0, 1], [colour_grey[0], colour_green[0]]);
         let gscale = LinearScale([0, 1], [colour_grey[1], colour_green[1]]);
         let bscale = LinearScale([0, 1], [colour_grey[2], colour_green[2]]);
-        let colour = [rscale(scores.total_score), gscale(scores.total_score), bscale(scores.total_score)];
+        return [rscale(score), gscale(score), bscale(score)];
+    }
+
+    function doHide() {
+        if (!autoHide) return;
+        headline_score_container_el.slideUp();
+    }
+
+    function doShow() {
+        if (!autoHide) return;
+        headline_score_container_el.delay(1000).slideDown();
+    }
+
+    function empty() {
+        headline_score_container_el.html("");
+        score_analisys_container_el.html("");
+        headline_score_container_el.append(score_analisys_container_el);
+    }
+
+    async function displayAnalysis() {
+        const title = getTitle();
+        if (!title || !title.trim().length) {
+            empty();
+            return false;
+        }
+        const scores = await calc_score.score(title);
+        let colour = calculateColour(scores.total_score);
         const score_el = jQuery(`
         <div class='headlineengine-score' style="background-color: rgba(${ colour.join(", ")}, 0.6)">
             <div class='headlineengine-score-value'>${ Math.floor(scores.total_score * 100) }<div class='headlineengine-divisor'>100</div></div>
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
-        container.html(score_el);
-        const score_analisys_container = jQuery(`<div class="headlineengine-analysis"></div>`);
+        headline_score_container_el.html(score_el);
+        
         for (let score of scores.scores) {
             const score_el = jQuery(`<div>${score.name}: ${score.message}</div>`);
-            score_analisys_container.append(score_el);
+            score_analisys_container_el.append(score_el);
         }
-        container.append(score_analisys_container);
-        // const analysis = jQuery(`<div class="headlineengine-analysis">
-        //     <div class="headlineengine-analysis-readability">Readability: ${score.readability.message} (${Math.round(score.readability.ease_score)})</div>
-        //     <div class="headlineengine-analysis-length">Length: ${score.length.message} (${score.length.length})</div>
-        //     <div class="headlineengine-analysis-powerwords">Powerwords: ${(score.powerwords.words.length) ? score.powerwords.words.map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(", ") : "None" }</div>
-        // </div>`);
         
-        // container.append(analysis);
-        suggest(container);
         return true;
     }
-    jQuery(async () => {
+
+    function suggest(container) {
+        const suggest = new HeadlineEngineSuggest();
+        const suggestButton = document.createElement('button');
+        const resultsContainer = document.createElement('div');
+        resultsContainer.classList.add("headlineengine-suggest-results");
+        resultsContainer.style.display = autoHide ? "none" : "block";
+        suggestButton.innerText = 'Suggest';
+        suggestButton.classList.add("headlineengine-suggest-button");
+        suggestButton.addEventListener('click', suggest.suggest.bind(suggest));
+        suggest.addEventListener("start", function() {
+            suggestButton.disabled = true;
+            suggestButton.innerText = "Suggesting...";
+        });
+        suggest.addEventListener("success", async function(e) {
+            const calc_score = new Calc_Score();
+            calc_score.init();
+            const response = e.detail;
+            resultsContainer.innerHTML = "";
+            for (let headline of response) {
+                const score = await calc_score.score(headline);
+                const suggestedHeadlineEl = document.createElement("div");
+                suggestedHeadlineEl.classList.add("headlineengine-suggest-result");
+                const scoreEl = document.createElement("span");
+                scoreEl.classList.add("headlineengine-suggest-result-score");
+                scoreEl.innerText = Math.round(score.total_score * 100);
+                suggestedHeadlineEl.innerText = headline;
+                suggestedHeadlineEl.prepend(scoreEl);
+                suggestedHeadlineEl.addEventListener("click", function() {
+                    console.log({title, title_descriptor, headline});
+                    if (editor_type === "classic") {
+                        jQuery(title_descriptor).val(headline);
+                    } else {
+                        wp.data.dispatch('core/editor').editPost({ title: headline });
+                    }
+                    resultsContainer.style.display = "none";
+                    jQuery(container).trigger("headline-updated");
+                });
+                resultsContainer.append(suggestedHeadlineEl);
+            }
+            suggestButton.disabled = false;
+            suggestButton.innerText = "Suggest";
+            // Close when we click outside
+            jQuery(document).on("click", function(e) {
+                resultsContainer.style.display = "none";
+                jQuery(document).off("click");
+            });
+            resultsContainer.style.display = "block";
+        });
+        suggest.addEventListener("error", function(e) {
+            suggestButton.disabled = false;
+            suggestButton.innerText = "Suggest";
+            const error = e.detail;
+            alert(error.message || "An error occurred. Please try again.");
+        });
+        container.append(suggestButton);
+        resultsContainer.style.display = "none";
+        // container.append(resultsContainer);
+        jQuery(container).prepend(resultsContainer);
+    }
+    
+    async function init() {
         await calc_score.init();
         if (jQuery("#titlewrap").length) {
             editor_type = "classic";
         }
-        // wait for title_descriptor to be loaded
-        let title_descriptor = ".editor-post-title__input";
+        title_descriptor = ".editor-post-title__input";
         let titlewrap_descriptor = ".edit-post-visual-editor__post-title-wrapper";
         if (editor_type === "classic") { // Looks like classic editor
             title_descriptor = "#title";
@@ -69,92 +162,54 @@ async function main() {
             title_descriptor_el = jQuery(title_descriptor);
         }
         const titlewrap_el = jQuery(titlewrap_descriptor);
-        const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
         titlewrap_el.after(headline_score_container_el);
-        headline_score_container_el.hide();
-        if (await display_analysis(headline_score_container_el, title_descriptor)) {
-            headline_score_container_el.slideDown();
+        // if (autoHide) headline_score_container_el.hide();
+        if (await displayAnalysis()) {
+            suggest(headline_score_container_el);
+            doShow();
         };
+        if (autoHide) initAutoshow();
+    }
+
+    function initAutoshow() {
         let timer;
         title_descriptor_el.on("keypress", async function(e) {
             if (timer) clearTimeout(timer);
             // If key is space
             if (e.key === " ") {
-                await display_analysis(headline_score_container_el, title_descriptor);
+                await displayAnalysis();
                 return;
             }
             timer = setTimeout(async () => {
-                await display_analysis(headline_score_container_el, title_descriptor);
-                headline_score_container_el.slideDown();
+                console.log("Displaying analysis");
+                await displayAnalysis();
+                doShow();
             }, 500);
         })
         title_descriptor_el.on("focus", async function() {
             headline_score_container_el.stop().stop();
-            await display_analysis(headline_score_container_el, title_descriptor);
-            headline_score_container_el.slideDown();
+            await displayAnalysis();
+            doShow();
         })
         const can_hide = function() {
             return !jQuery(":focus").is(title_descriptor_el) && !jQuery(":hover").is(headline_score_container_el);
         };
         title_descriptor_el.on("blur", function() {
             if (can_hide()) {
-                headline_score_container_el.delay(1000).slideUp();
+                doHide();
             }
         })
         headline_score_container_el.on("mouseout", function() {
             if (can_hide()) {
-                headline_score_container_el.delay(1000).slideUp();
+                doHide();
             }
         })
-        // await display_analysis(headline_score_container_el, title_descriptor);
+    }
+
+    jQuery(headline_score_container_el).on("headline-updated", async function() {
+        console.log("Headline updated");
+        await displayAnalysis();
     });
-}
-
-function suggest(container) {
-    const suggest = new HeadlineEngineSuggest();
-        const suggestButton = document.createElement('button');
-        const resultsContainer = document.createElement('div');
-        resultsContainer.classList.add("headlineengine-suggest-results");
-        resultsContainer.style.display = "none";
-        suggestButton.innerText = 'Suggest';
-        suggestButton.classList.add("headlineengine-suggest-button");
-        suggestButton.addEventListener('click', suggest.suggest.bind(suggest));
-        suggest.addEventListener("start", function() {
-            suggestButton.disabled = true;
-            suggestButton.innerText = "Suggesting...";
-        });
-        suggest.addEventListener("success", function(e) {
-            suggestButton.disabled = false;
-            suggestButton.innerText = "Suggest";
-            const response = e.detail;
-            resultsContainer.innerHTML = "";
-            for (let headline of response) {
-                const headlineEl = document.createElement("div");
-                headlineEl.classList.add("headlineengine-suggest-result");
-                headlineEl.innerText = headline;
-                headlineEl.addEventListener("click", function() {
-                    const title = jQuery('input[name="post_title"]').first();
-                    title.val(headline);
-                    title.trigger("input");
-                });
-                resultsContainer.append(headlineEl);
-            }
-            // Close when we click outside
-            jQuery(document).on("click", function(e) {
-                resultsContainer.style.display = "none";
-                jQuery(document).off("click");
-            });
-            resultsContainer.style.display = "block";
-        });
-        suggest.addEventListener("error", function(e) {
-            suggestButton.disabled = false;
-            suggestButton.innerText = "Suggest";
-            const error = e.detail;
-            alert(error);
-        });
-        container.append(suggestButton);
-        // container.append(resultsContainer);
-        jQuery(container).parent().append(resultsContainer);
-}
-
-main();
+    
+    await init();
+});

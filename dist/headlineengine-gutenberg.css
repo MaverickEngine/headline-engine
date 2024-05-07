@@ -65,11 +65,20 @@
 .headlineengine-suggest-button {
   margin-left: 10px;
   border-radius: 3px;
-  border-color: #2271b1;
+  border: 1px #2271b1 solid;
   background-color: #2271b1;
   color: #fff;
   cursor: pointer;
 }
 .headlineengine-suggest-button:hover {
   background-color: #135e96;
+}
+
+.headlineengine-suggest-result-score {
+  border-radius: 8px;
+  background-color: #2271b1;
+  color: #fff;
+  font-size: 0.8em;
+  padding: 3px 3px;
+  margin-right: 5px;
 }
