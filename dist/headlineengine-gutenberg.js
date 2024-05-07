@@ -2327,8 +2327,9 @@
         let title;
 
         // Elements
-        jQuery("<div id='headlineengine-container'></div>");
+        const headline_engine_container_el = jQuery("<div id='headlineengine-container'></div>");
         const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
+        headline_engine_container_el.append(headline_score_container_el);
         const score_analisys_container_el = jQuery(`<div class="headlineengine-analysis"></div>`);
         headline_score_container_el.append(score_analisys_container_el);
 
@@ -2375,12 +2376,10 @@
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
             headline_score_container_el.html(score_el);
-            
             for (let score of scores.scores) {
                 const score_el = jQuery(`<div>${score.name}: ${score.message}</div>`);
                 score_analisys_container_el.append(score_el);
             }
-            
             return true;
         }
 
@@ -2465,13 +2464,18 @@
                 title_descriptor_el = jQuery(title_descriptor);
             }
             const titlewrap_el = jQuery(titlewrap_descriptor);
-            titlewrap_el.after(headline_score_container_el);
-            // if (autoHide) headline_score_container_el.hide();
-            if (await displayAnalysis()) {
-                suggest(headline_score_container_el);
-            }    }
+            titlewrap_el.after(headline_engine_container_el);
+            suggest(headline_engine_container_el);
+            await displayAnalysis();
+            // Listen for changes in the title
+            if (editor_type === "classic") {
+                jQuery(title_descriptor).on("input", async function() {
+                    await displayAnalysis();
+                });
+            }
+        }
 
-        jQuery(headline_score_container_el).on("headline-updated", async function() {
+        jQuery(headline_engine_container_el).on("headline-updated", async function() {
             console.log("Headline updated");
             await displayAnalysis();
         });

@@ -14,8 +14,9 @@ jQuery(async () => {
     let title;
 
     // Elements
-    const headline_engine_container = jQuery("<div id='headlineengine-container'></div>");
+    const headline_engine_container_el = jQuery("<div id='headlineengine-container'></div>");
     const headline_score_container_el = jQuery("<div id='headlineengine-score-container'></div>");
+    headline_engine_container_el.append(headline_score_container_el);
     const score_analisys_container_el = jQuery(`<div class="headlineengine-analysis"></div>`);
     headline_score_container_el.append(score_analisys_container_el);
 
@@ -42,16 +43,6 @@ jQuery(async () => {
         return [rscale(score), gscale(score), bscale(score)];
     }
 
-    function doHide() {
-        if (!autoHide) return;
-        headline_score_container_el.slideUp();
-    }
-
-    function doShow() {
-        if (!autoHide) return;
-        headline_score_container_el.delay(1000).slideDown();
-    }
-
     function empty() {
         headline_score_container_el.html("");
         score_analisys_container_el.html("");
@@ -72,12 +63,10 @@ jQuery(async () => {
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
         headline_score_container_el.html(score_el);
-        
         for (let score of scores.scores) {
             const score_el = jQuery(`<div>${score.name}: ${score.message}</div>`);
             score_analisys_container_el.append(score_el);
         }
-        
         return true;
     }
 
@@ -162,51 +151,18 @@ jQuery(async () => {
             title_descriptor_el = jQuery(title_descriptor);
         }
         const titlewrap_el = jQuery(titlewrap_descriptor);
-        titlewrap_el.after(headline_score_container_el);
-        // if (autoHide) headline_score_container_el.hide();
-        if (await displayAnalysis()) {
-            suggest(headline_score_container_el);
-            doShow();
-        };
-        if (autoHide) initAutoshow();
+        titlewrap_el.after(headline_engine_container_el);
+        suggest(headline_engine_container_el);
+        await displayAnalysis();
+        // Listen for changes in the title
+        if (editor_type === "classic") {
+            jQuery(title_descriptor).on("input", async function() {
+                await displayAnalysis();
+            });
+        }
     }
 
-    function initAutoshow() {
-        let timer;
-        title_descriptor_el.on("keypress", async function(e) {
-            if (timer) clearTimeout(timer);
-            // If key is space
-            if (e.key === " ") {
-                await displayAnalysis();
-                return;
-            }
-            timer = setTimeout(async () => {
-                console.log("Displaying analysis");
-                await displayAnalysis();
-                doShow();
-            }, 500);
-        })
-        title_descriptor_el.on("focus", async function() {
-            headline_score_container_el.stop().stop();
-            await displayAnalysis();
-            doShow();
-        })
-        const can_hide = function() {
-            return !jQuery(":focus").is(title_descriptor_el) && !jQuery(":hover").is(headline_score_container_el);
-        };
-        title_descriptor_el.on("blur", function() {
-            if (can_hide()) {
-                doHide();
-            }
-        })
-        headline_score_container_el.on("mouseout", function() {
-            if (can_hide()) {
-                doHide();
-            }
-        })
-    }
-
-    jQuery(headline_score_container_el).on("headline-updated", async function() {
+    jQuery(headline_engine_container_el).on("headline-updated", async function() {
         console.log("Headline updated");
         await displayAnalysis();
     });
