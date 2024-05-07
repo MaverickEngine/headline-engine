@@ -50,13 +50,11 @@ jQuery(async () => {
     }
 
     async function displayAnalysis() {
-        console.log("displayAnalysis")
         const title = getTitle();
         if (!title || !title.trim().length) {
             empty();
             return false;
         }
-        console.log(title);
         const scores = await calc_score.score(title);
         let colour = calculateColour(scores.total_score);
         const score_el = jQuery(`
@@ -100,7 +98,6 @@ jQuery(async () => {
                 suggestedHeadlineEl.innerText = headline;
                 suggestedHeadlineEl.prepend(scoreEl);
                 suggestedHeadlineEl.addEventListener("click", function() {
-                    console.log({title, title_descriptor, headline});
                     if (editor_type === "classic") {
                         jQuery(title_descriptor).val(headline);
                     } else {
@@ -178,6 +175,10 @@ jQuery(async () => {
             });
         }
     }
+
+    jQuery(headline_engine_container_el).on("headline-updated", async function() {
+        await displayAnalysis();
+    });
     
     await init();
 });
