@@ -1,11 +1,11 @@
 <?php
 /**
-* Plugin Name: HeadlineEngine
+* Plugin Name: HeadlineEngine Dev
 * Plugin URI: https://github.com/MaverickEngine/headline-engine
 * Description: What makes a good headline? Get instant headline analysis based on readability, length, and powerwords. Brought to you by MavEngine, &lt;em&gt;Powering Media. 
 * Author: MavEngine
 * Author URI: https://mavengine.com
-* Version: 0.4.0
+* Version: 0.4.0-dev
 * License: GPLv2 or later
 * License URI: https://www.gnu.org/licenses/gpl-3.0.html
 * WC requires at least: 5.8.0
