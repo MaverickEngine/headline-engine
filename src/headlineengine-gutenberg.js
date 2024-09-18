@@ -50,13 +50,11 @@ jQuery(async () => {
     }
 
     async function displayAnalysis() {
-        console.log("displayAnalysis")
         const title = getTitle();
         if (!title || !title.trim().length) {
             empty();
             return false;
         }
-        console.log(title);
         const scores = await calc_score.score(title);
         console.log(scores);
         let colour = calculateColour(scores.total_score);
