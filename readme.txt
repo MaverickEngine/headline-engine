@@ -46,6 +46,9 @@ Powerwords are emotional words. You can set your own, or use the words from [Ran
 
 == Changelog ==
 
+= 0.4.2 =
+* Suggest feature
+
 = 0.2.0 =
 * Complete refactor
 * Seperate scorers to make it easy to add more

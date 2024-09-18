@@ -56,10 +56,11 @@ jQuery(async () => {
             return false;
         }
         const scores = await calc_score.score(title);
+        console.log(scores);
         let colour = calculateColour(scores.total_score);
         const score_el = jQuery(`
-        <div class='headlineengine-score' style="background-color: rgba(${ colour.join(", ")}, 0.6)">
-            <div class='headlineengine-score-value'>${ Math.floor(scores.total_score * 100) }<div class='headlineengine-divisor'>100</div></div>
+        <div class='headlineengine-score' style="background-color: rgba(${colour.join(", ")}, 0.6)">
+            <div class='headlineengine-score-value'>${Math.floor(scores.total_score * 100)}<div class='headlineengine-divisor'>100</div></div>
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
         headline_score_container_el.html(score_el);
@@ -67,6 +68,7 @@ jQuery(async () => {
             const score_el = jQuery(`<div>${score.name}: ${score.message}</div>`);
             score_analisys_container_el.append(score_el);
         }
+        headline_engine_container_el.append(score_analisys_container_el);
         return true;
     }
 
@@ -79,11 +81,11 @@ jQuery(async () => {
         suggestButton.innerText = 'Suggest';
         suggestButton.classList.add("headlineengine-suggest-button");
         suggestButton.addEventListener('click', suggest.suggest.bind(suggest));
-        suggest.addEventListener("start", function() {
+        suggest.addEventListener("start", function () {
             suggestButton.disabled = true;
             suggestButton.innerText = "Suggesting...";
         });
-        suggest.addEventListener("success", async function(e) {
+        suggest.addEventListener("success", async function (e) {
             const calc_score = new Calc_Score();
             calc_score.init();
             const response = e.detail;
@@ -97,7 +99,8 @@ jQuery(async () => {
                 scoreEl.innerText = Math.round(score.total_score * 100);
                 suggestedHeadlineEl.innerText = headline;
                 suggestedHeadlineEl.prepend(scoreEl);
-                suggestedHeadlineEl.addEventListener("click", function() {
+                suggestedHeadlineEl.addEventListener("click", async function () {
+                    console.log({ title, title_descriptor, headline });
                     if (editor_type === "classic") {
                         jQuery(title_descriptor).val(headline);
                     } else {
@@ -105,19 +108,21 @@ jQuery(async () => {
                     }
                     resultsContainer.style.display = "none";
                     jQuery(container).trigger("headline-updated");
+                    empty();
+                    displayAnalysis();
                 });
                 resultsContainer.append(suggestedHeadlineEl);
             }
             suggestButton.disabled = false;
             suggestButton.innerText = "Suggest";
             // Close when we click outside
-            jQuery(document).on("click", function(e) {
+            jQuery(document).on("click", function (e) {
                 resultsContainer.style.display = "none";
                 jQuery(document).off("click");
             });
             resultsContainer.style.display = "block";
         });
-        suggest.addEventListener("error", function(e) {
+        suggest.addEventListener("error", function (e) {
             suggestButton.disabled = false;
             suggestButton.innerText = "Suggest";
             const error = e.detail;
@@ -128,7 +133,7 @@ jQuery(async () => {
         // container.append(resultsContainer);
         jQuery(container).prepend(resultsContainer);
     }
-    
+
     async function init() {
         await calc_score.init();
         if (jQuery("#titlewrap").length) {
@@ -151,18 +156,18 @@ jQuery(async () => {
         }
         const titlewrap_el = jQuery(titlewrap_descriptor);
         titlewrap_el.after(headline_engine_container_el);
-        suggest(headline_engine_container_el);
         await displayAnalysis();
+        suggest(headline_engine_container_el);
         // Listen for changes in the title
         if (editor_type === "classic") {
-            title_descriptor_el.on("keypress", async function(e) {
+            title_descriptor_el.on("keypress", async function (e) {
                 const new_title = jQuery(title_descriptor).val();
                 if (new_title !== title) {
                     title = new_title;
                     await displayAnalysis();
                 }
             })
-            jQuery(title_descriptor).on("change", async function() {
+            jQuery(title_descriptor).on("change", async function () {
                 await displayAnalysis();
             });
         } else {
@@ -176,9 +181,5 @@ jQuery(async () => {
         }
     }
 
-    jQuery(headline_engine_container_el).on("headline-updated", async function() {
-        await displayAnalysis();
-    });
-    
     await init();
 });
