@@ -100,3 +100,50 @@
     padding: 3px 3px;
     margin-right: 5px;
 }
+
+.block-editor {
+    #headlineengine-container {
+        gap: 0.5rem;
+        max-width: 550px;
+        margin: 5px auto !important;
+        font-weight: 200;
+
+        .headlineengine-score {
+            padding: 1px 2px;
+
+            .headlineengine-score-value {
+                font-size: 1.2em;
+                margin-right: 5px;
+            }
+        }
+
+        .headlineengine-analysis {
+            font-size: 0.8em;
+        }
+
+        .headlineengine-divisor {
+            border-top: 1px solid #3c434a;
+            margin-top: 2px;
+            padding-top: 2px;
+        }
+    }
+
+    .headlineengine-suggest-button {
+        padding: 3px 8px;
+        font-size: 0.9em;
+    }
+
+    .headlineengine-suggest-results {
+        max-width: 600px;
+
+        .headlineengine-suggest-result {
+            padding: 8px;
+        }
+    }
+
+    .headlineengine-suggest-result-score {
+        font-size: 0.7em;
+        padding: 2px;
+        margin-right: 3px;
+    }
+}
