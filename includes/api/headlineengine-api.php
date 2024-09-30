@@ -42,7 +42,7 @@ class HeadlineEngineAPI {
         }
         $summaryengine = new SummaryEngineChatGPT($api_key);
         $params = array(
-            'model' => 'gpt-3.5-turbo',
+            'model' => 'gpt-4o-mini',
             'messages' => $messages,
             'max_tokens' => 200,
             'temperature' => $temperature,
@@ -73,6 +73,10 @@ class HeadlineEngineAPI {
             $response = $this->send_to_gpt($messages, 0.1);
             $suggestions = explode("\n", $response["choices"][0]["text"]);
             $suggestions = array_map([$this, "clean_headline"], $suggestions);
+            // Remove blanks and reindex the array
+            $suggestions = array_values(array_filter($suggestions, function($suggestion) {
+                return !empty($suggestion);
+            }));
             return $suggestions;
         } catch (Exception $e) {
             return new WP_Error( 'headlineengine_error', $e->getMessage(), array( 'status' => 500 ) );
