@@ -87,3 +87,40 @@
   padding: 3px 3px;
   margin-right: 5px;
 }
+
+.block-editor #headlineengine-container {
+  gap: 0.5rem;
+  max-width: 550px;
+  margin: 5px auto !important;
+  font-weight: 200;
+}
+.block-editor #headlineengine-container .headlineengine-score {
+  padding: 1px 2px;
+}
+.block-editor #headlineengine-container .headlineengine-score .headlineengine-score-value {
+  font-size: 1.2em;
+  margin-right: 5px;
+}
+.block-editor #headlineengine-container .headlineengine-analysis {
+  font-size: 0.8em;
+}
+.block-editor #headlineengine-container .headlineengine-divisor {
+  border-top: 1px solid #3c434a;
+  margin-top: 2px;
+  padding-top: 2px;
+}
+.block-editor .headlineengine-suggest-button {
+  padding: 3px 8px;
+  font-size: 0.9em;
+}
+.block-editor .headlineengine-suggest-results {
+  max-width: 600px;
+}
+.block-editor .headlineengine-suggest-results .headlineengine-suggest-result {
+  padding: 8px;
+}
+.block-editor .headlineengine-suggest-result-score {
+  font-size: 0.7em;
+  padding: 2px;
+  margin-right: 3px;
+}
