@@ -43,7 +43,7 @@ function get_content() {
         }
         return jQuery("#content").val(); // Last try...
     } else { // Gutenberg editor
-        return wp.data.select( "core/editor" ).getEditedPostContent();
+        return wp.data.select("core/editor").getEditedPostContent();
     }
 }
 
@@ -57,7 +57,7 @@ export class HeadlineEngineSuggest extends EventTarget {
         const suggestButton = document.createElement('button');
         suggestButton.innerText = 'Suggest';
         suggestButton.addEventListener('click', this.suggest.bind(this));
-        
+
         return suggestButton;
     }
 
@@ -89,5 +89,5 @@ export class HeadlineEngineSuggest extends EventTarget {
         }
     }
 
-    
+
 }
