@@ -2,7 +2,8 @@
     display: grid;
     grid-template-areas:
         "score analysis"
-        "suggest suggest";
+        "suggest suggest"
+        "button button";
     grid-template-columns: auto 1fr;
     gap: 1rem;
     align-items: stretch;

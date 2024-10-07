@@ -1,6 +1,6 @@
 #headlineengine-container {
   display: grid;
-  grid-template-areas: "score analysis" "suggest suggest";
+  grid-template-areas: "score analysis" "suggest suggest" "button button";
   grid-template-columns: auto 1fr;
   gap: 1rem;
   align-items: stretch;

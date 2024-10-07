@@ -2377,8 +2377,10 @@
             <div class='headlineengine-score-title'>HeadlineEngine<br>Score</div>
         </div>`);
             headline_score_container_el.html(score_el);
+            score_analisys_container_el.empty();
             for (let score of scores.scores) {
                 const score_el = jQuery(`<div>${score.name}: ${score.message}</div>`);
+
                 score_analisys_container_el.append(score_el);
             }
             headline_engine_container_el.append(score_analisys_container_el);
